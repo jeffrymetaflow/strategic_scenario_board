@@ -1,5 +1,6 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
 
 st.set_page_config(page_title="Strategic Scenario Board", layout="wide")
 st.title("🧭 Strategic Scenario Planning Board for Investors")
@@ -23,13 +24,11 @@ with col2:
     ax.set_yticks([])
     ax.set_title("Power Shift vs. Economic Fragmentation", fontsize=9)
 
-    # Centered quadrant labels
     ax.text(-0.5, 0.5, "Pax Americana\n2.0", fontsize=8, color='green', ha='center', va='center')
     ax.text(0.5, 0.5, "Fragmented\nPowers", fontsize=8, color='red', ha='center', va='center')
     ax.text(0.5, -0.5, "Chinese\nCentury", fontsize=8, color='blue', ha='center', va='center')
     ax.text(-0.5, -0.5, "Cold\nTech War", fontsize=8, color='orange', ha='center', va='center')
 
-    # Label axes
     ax.text(0.95, -0.05, "China-Centric →", ha='right', fontsize=7)
     ax.text(-0.95, -0.05, "← U.S.-Centric", ha='left', fontsize=7)
     ax.text(-0.05, 0.95, "Integrated ↑", va='bottom', fontsize=7)
@@ -45,6 +44,16 @@ with col1:
         "🟨 Cold Tech War"
     ])
 
+    def plot_scenario_chart(title, x_label, y_label, data_func):
+        fig, ax = plt.subplots(figsize=(6, 2))
+        x = np.arange(10)
+        y = data_func(x)
+        ax.plot(x, y, marker='o')
+        ax.set_title(title)
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
+        st.pyplot(fig)
+
     if scenario.endswith("Pax Americana 2.0"):
         st.header("🟩 Pax Americana 2.0")
         st.markdown("""
@@ -55,6 +64,7 @@ with col1:
         **Strategy:** Long: S&P 500, Treasuries, Growth ETFs  
         **Geo Hotspots:** North America, Western Europe
         """)
+        plot_scenario_chart("Projected S&P 500 Growth", "Years Ahead", "Index Value", lambda x: 5000 + 300 * x)
 
     elif scenario.endswith("Fragmented Powers"):
         st.header("🟥 Fragmented Powers")
@@ -66,6 +76,7 @@ with col1:
         **Strategy:** Long: Emerging Markets, Commodities, Infrastructure  
         **Geo Hotspots:** Africa, ASEAN, LATAM
         """)
+        plot_scenario_chart("Commodity Volatility Index (Simulated)", "Months", "Volatility", lambda x: 20 + 5 * np.sin(x))
 
     elif scenario.endswith("Chinese Century"):
         st.header("🟦 Chinese Century")
@@ -77,6 +88,7 @@ with col1:
         **Strategy:** Long: China ETFs, Gold, RMB baskets  
         **Geo Hotspots:** China, Central Asia, Africa
         """)
+        plot_scenario_chart("Rare Earth Index vs. USD", "Years", "Price Index", lambda x: 100 + 20 * x + 15 * np.random.randn(len(x)))
 
     elif scenario.endswith("Cold Tech War"):
         st.header("🟨 Cold Tech War")
@@ -88,6 +100,7 @@ with col1:
         **Strategy:** Long: Gold, U.S. Defense, VIX hedging  
         **Geo Hotspots:** India, Mexico, Taiwan (high risk)
         """)
+        plot_scenario_chart("Defense Budget Growth (Simulated)", "Years", "Spending (B$)", lambda x: 700 + 30 * x)
 
 st.markdown("---")
 
@@ -100,4 +113,3 @@ st.markdown("""
 | BRICS CBDC adoption | Pax Americana → Chinese Century |
 | U.S. manufacturing boom | Cold Tech War → Pax Americana 2.0 |
 """)
-
