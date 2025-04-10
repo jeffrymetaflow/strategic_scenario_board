@@ -14,24 +14,24 @@ col1, col2 = st.columns([2, 1])
 
 with col2:
     st.subheader("🌍 Scenario Quadrant Map")
-    fig, ax = plt.subplots(figsize=(4, 4))
+    fig, ax = plt.subplots(figsize=(3, 3))
     ax.axhline(0, color='black')
     ax.axvline(0, color='black')
     ax.set_xlim(-1, 1)
     ax.set_ylim(-1, 1)
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.set_title("Power Shift vs. Economic Fragmentation", fontsize=10)
+    ax.set_title("Power Shift vs. Economic Fragmentation", fontsize=9)
 
-    # Add quadrant labels
-    ax.text(-0.9, 0.9, "Pax Americana 2.0", fontsize=8, color='green')
-    ax.text(0.5, 0.9, "Fragmented Powers", fontsize=8, color='red')
-    ax.text(0.5, -0.8, "Chinese Century", fontsize=8, color='blue')
-    ax.text(-0.9, -0.8, "Cold Tech War", fontsize=8, color='orange')
+    # Centered quadrant labels
+    ax.text(-0.5, 0.5, "Pax Americana\n2.0", fontsize=8, color='green', ha='center', va='center')
+    ax.text(0.5, 0.5, "Fragmented\nPowers", fontsize=8, color='red', ha='center', va='center')
+    ax.text(0.5, -0.5, "Chinese\nCentury", fontsize=8, color='blue', ha='center', va='center')
+    ax.text(-0.5, -0.5, "Cold\nTech War", fontsize=8, color='orange', ha='center', va='center')
 
     # Label axes
-    ax.text(0.9, -0.05, "China-Centric →", ha='right', fontsize=7)
-    ax.text(-0.9, -0.05, "← U.S.-Centric", ha='left', fontsize=7)
+    ax.text(0.95, -0.05, "China-Centric →", ha='right', fontsize=7)
+    ax.text(-0.95, -0.05, "← U.S.-Centric", ha='left', fontsize=7)
     ax.text(-0.05, 0.95, "Integrated ↑", va='bottom', fontsize=7)
     ax.text(-0.05, -0.95, "↓ Decoupled", va='top', fontsize=7)
 
