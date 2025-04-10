@@ -24,11 +24,13 @@ with col2:
     ax.set_yticks([])
     ax.set_title("Power Shift vs. Economic Fragmentation", fontsize=9)
 
+    # Centered quadrant labels
     ax.text(-0.5, 0.5, "Pax Americana\n2.0", fontsize=8, color='green', ha='center', va='center')
     ax.text(0.5, 0.5, "Fragmented\nPowers", fontsize=8, color='red', ha='center', va='center')
     ax.text(0.5, -0.5, "Chinese\nCentury", fontsize=8, color='blue', ha='center', va='center')
     ax.text(-0.5, -0.5, "Cold\nTech War", fontsize=8, color='orange', ha='center', va='center')
 
+    # Label axes
     ax.text(0.95, -0.05, "China-Centric →", ha='right', fontsize=7)
     ax.text(-0.95, -0.05, "← U.S.-Centric", ha='left', fontsize=7)
     ax.text(-0.05, 0.95, "Integrated ↑", va='bottom', fontsize=7)
@@ -44,15 +46,7 @@ with col1:
         "🟨 Cold Tech War"
     ])
 
-    def plot_scenario_chart(title, x_label, y_label, data_func):
-        fig, ax = plt.subplots(figsize=(6, 2))
-        x = np.arange(10)
-        y = data_func(x)
-        ax.plot(x, y, marker='o')
-        ax.set_title(title)
-        ax.set_xlabel(x_label)
-        ax.set_ylabel(y_label)
-        st.pyplot(fig)
+    st.markdown("---")
 
     if scenario.endswith("Pax Americana 2.0"):
         st.header("🟩 Pax Americana 2.0")
@@ -64,7 +58,16 @@ with col1:
         **Strategy:** Long: S&P 500, Treasuries, Growth ETFs  
         **Geo Hotspots:** North America, Western Europe
         """)
-        plot_scenario_chart("Projected S&P 500 Growth", "Years Ahead", "Index Value", lambda x: 5000 + 300 * x)
+
+        growth_factor = st.slider("Tech Innovation Growth Rate (%)", 1, 20, 10)
+        x = np.linspace(0, 10, 100)
+        y = 1000 * np.exp(growth_factor / 100 * x)
+        fig, ax = plt.subplots()
+        ax.plot(x, y)
+        ax.set_title("Simulated S&P 500 Growth Curve")
+        ax.set_xlabel("Years")
+        ax.set_ylabel("Index Level")
+        st.pyplot(fig)
 
     elif scenario.endswith("Fragmented Powers"):
         st.header("🟥 Fragmented Powers")
@@ -76,7 +79,16 @@ with col1:
         **Strategy:** Long: Emerging Markets, Commodities, Infrastructure  
         **Geo Hotspots:** Africa, ASEAN, LATAM
         """)
-        plot_scenario_chart("Commodity Volatility Index (Simulated)", "Months", "Volatility", lambda x: 20 + 5 * np.sin(x))
+
+        vol = st.slider("Commodity Volatility Index", 10, 100, 40)
+        x = np.linspace(0, 50, 100)
+        y = 100 + vol * np.sin(x / 5)
+        fig, ax = plt.subplots()
+        ax.plot(x, y)
+        ax.set_title("Simulated Commodity Price Volatility")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Commodity Index")
+        st.pyplot(fig)
 
     elif scenario.endswith("Chinese Century"):
         st.header("🟦 Chinese Century")
@@ -88,7 +100,16 @@ with col1:
         **Strategy:** Long: China ETFs, Gold, RMB baskets  
         **Geo Hotspots:** China, Central Asia, Africa
         """)
-        plot_scenario_chart("Rare Earth Index vs. USD", "Years", "Price Index", lambda x: 100 + 20 * x + 15 * np.random.randn(len(x)))
+
+        demand = st.slider("Global Rare Earth Demand Index", 50, 200, 120)
+        x = np.linspace(0, 24, 100)
+        y = 100 + demand * np.log1p(x)
+        fig, ax = plt.subplots()
+        ax.plot(x, y)
+        ax.set_title("Rare Earth Price Projection")
+        ax.set_xlabel("Months")
+        ax.set_ylabel("Index Value")
+        st.pyplot(fig)
 
     elif scenario.endswith("Cold Tech War"):
         st.header("🟨 Cold Tech War")
@@ -100,7 +121,18 @@ with col1:
         **Strategy:** Long: Gold, U.S. Defense, VIX hedging  
         **Geo Hotspots:** India, Mexico, Taiwan (high risk)
         """)
-        plot_scenario_chart("Defense Budget Growth (Simulated)", "Years", "Spending (B$)", lambda x: 700 + 30 * x)
+
+        risk = st.slider("Geopolitical Risk Level", 0, 100, 50)
+        x = np.arange(0, 100)
+        gold = 1800 + risk * np.sin(x / 10)
+        vix = 20 + (100 - risk) * np.cos(x / 15)
+        fig, ax = plt.subplots()
+        ax.plot(x, gold, label="Gold Price")
+        ax.plot(x, vix, label="VIX Index")
+        ax.set_title("Gold vs VIX Simulation")
+        ax.set_xlabel("Days")
+        ax.legend()
+        st.pyplot(fig)
 
 st.markdown("---")
 
