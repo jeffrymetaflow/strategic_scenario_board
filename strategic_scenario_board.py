@@ -1,14 +1,30 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+from GNews import GNews
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+
+nltk.download('vader_lexicon')
 
 st.set_page_config(page_title="Strategic Scenario Board", layout="wide")
 st.title("🧭 Strategic Scenario Planning Board for Investors")
 
 st.markdown("""
 ### Explore how future global power dynamics and economic fragmentation could shape investment strategy.
-Select a scenario below to view detailed analysis and recommended investor actions.
+Select a scenario below to view detailed analysis, sentiment overlays, and simulated charts.
 """)
+
+# Setup GNews and Sentiment Analyzer
+gnews = GNews(language='en', max_results=5)
+sia = SentimentIntensityAnalyzer()
+
+scenario_keywords = {
+    "🟩 Pax Americana 2.0": ["NATO", "US innovation", "global leadership"],
+    "🟥 Fragmented Powers": ["trade blocs", "multipolar", "regional conflict"],
+    "🟦 Chinese Century": ["China economy", "BRICS", "yuan", "rare earths"],
+    "🟨 Cold Tech War": ["chip bans", "tech decoupling", "cybersecurity", "reshoring"]
+}
 
 # Use columns to position the quadrant chart
 col1, col2 = st.columns([2, 1])
@@ -39,12 +55,25 @@ with col2:
     st.pyplot(fig)
 
 with col1:
-    scenario = st.selectbox("Choose a Scenario:", [
-        "🟩 Pax Americana 2.0",
-        "🟥 Fragmented Powers",
-        "🟦 Chinese Century",
-        "🟨 Cold Tech War"
-    ])
+    scenario = st.selectbox("Choose a Scenario:", list(scenario_keywords.keys()))
+
+    st.markdown("---")
+
+    def fetch_and_analyze_sentiment(keywords):
+        query = " OR ".join(keywords)
+        articles = gnews.get_news(query)
+        sentiments = []
+        for article in articles:
+            text = article['title'] + ' ' + (article.get('description') or '')
+            score = sia.polarity_scores(text)['compound']
+            sentiments.append((article['title'], score))
+        return sentiments
+
+    sentiments = fetch_and_analyze_sentiment(scenario_keywords[scenario])
+
+    st.subheader("📰 Real-Time News Sentiment Overlay")
+    for title, score in sentiments:
+        st.markdown(f"- **{title}** — Sentiment Score: `{score}`")
 
     st.markdown("---")
 
